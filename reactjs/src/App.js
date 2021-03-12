@@ -1,7 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from "react";
+import { socket } from './socket_client.js'
 
-function App() {
+socket.on("connection_valid", (data) => {
+  console.log("connection_valid " + data['data']);
+});
+
+/*function App() {
   return (
     <div className="App">
       <header className="App-header">
@@ -20,6 +26,32 @@ function App() {
       </header>
     </div>
   );
+}*/
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {    this.setState({value: event.target.value});  }
+  handleSubmit(event) {
+    alert('Le nom a été soumis : ' + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Nom :
+          <input type="text" value={this.state.value} onChange={this.handleChange} />        </label>
+        <input type="submit" value="Envoyer" />
+      </form>
+    );
+  }
 }
 
 export default App;
